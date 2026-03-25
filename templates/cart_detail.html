@@ -1,0 +1,36 @@
+<h1>Корзина</h1>
+
+{% if items %}
+<table border="1">
+  <thead>
+  <tr>
+    <th>Товар</th>
+    <th>Количество</th>
+    <th>Цена за единицу</th>
+    <th>Сумма</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for item in items %}
+  <tr>
+    <td>{{ item.product.name }}</td>
+    <td>{{ item.quantity }}</td>
+    <td>{{ item.product.price }} ₽</td>
+    <td>{{ item.product.price|floatformat:2 }} ₽</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+  <tfoot>
+  <tr>
+    <td colspan="3">Итого:</td>
+    <td>{{ cart.total|default:0 }} ₽</td>
+  </tr>
+  </tfoot>
+</table>
+<form action="{% url 'checkout' %}" method="get">
+  <button type="submit">Оформить заказ</button>
+</form>
+<a href="{% url 'product_list' %}">Продолжить покупки</a>
+{% else %}
+<p>Корзина пуста.</p>
+{% endif %}

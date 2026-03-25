@@ -24,8 +24,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/')
     category = models.ForeignKey('Category', on_delete=models.PROTECT)
 
-def __str__(self):
-    return self.name
+    def __str__(self):
+        return self.name
 
 
 # Остаток на складе
@@ -45,22 +45,27 @@ class Customer(models.Model):
     middle_name = models.CharField(max_length=100, blank=True)
     address = models.TextField(blank=True)
     phone = models.CharField(max_length=20, blank=True, unique=True)
-    email = models.EmailField(unique=True)  # дублируется для удобства
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
 
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def total(self):
+        return sum(item.product.price * item.quantity for item in self.items.all())
+
 
 # Корзина
 class CartItem(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='cart_items')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.customer} - {self.product} x{self.quantity}"
-
+    class Meta:
+        unique_together = ('cart', 'product')
 
 # Заказ
 class Order(models.Model):
