@@ -1,7 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Cart, CartItem, Order, OrderItem
 from online_store.forms import CartForm, OrderForm
+from online_store.forms import CustomUserCreationForm
 
 # Create your views here.
 
@@ -97,3 +100,25 @@ def checkout(request):
 def order_confirmation(request, order_id):
     order = get_object_or_404(Order, id=order_id, customer=request.user.customer)
     return render(request, 'order_confirmation.html', {'order': order})
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomUserCreationForm()
+
+    return render(request, 'registration/register.html', {'form': form})
+
+
+def home_view(request):
+    return render(request, 'home.html')
+
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'registration/logout.html')
