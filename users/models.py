@@ -28,15 +28,6 @@ class Product(models.Model):
         return self.name
 
 
-# Остаток на складе
-class Stock(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, primary_key=True)
-    quantity = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return f"{self.product.name}: {self.quantity}"
-
-
 # Клиент
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer')
@@ -94,3 +85,16 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} x{self.quantity} (order #{self.order.id})"
+
+
+#  Остаток по товару
+class StockBalance(models.Model):
+    product = models.OneToOneField('Product', on_delete=models.CASCADE, verbose_name="Товар")
+    quantity = models.PositiveIntegerField(default=0, verbose_name="Остаток на складе")
+
+    def __str__(self):
+        return f"{self.product.name} — {self.quantity} шт."
+
+    class Meta:
+        verbose_name = "Остаток товара"
+        verbose_name_plural = "Остатки товаров"

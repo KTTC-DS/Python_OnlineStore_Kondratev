@@ -1,0 +1,10 @@
+[
+  {
+    "model": "users.stockbalance",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "quantity": 50
+    }
+  }
+]

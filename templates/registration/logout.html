@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Выход из аккаунта{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="text-center">
+            <div class="mb-4">
+                <!-- Иконка выхода -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="text-muted" viewBox="0 0 16 16">
+                  <path d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                  <path d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+            </div>
+
+            <h2>Вы вышли из системы</h2>
+            <p class="text-muted">До новых встреч! Вы успешно покинули свой аккаунт.</p>
+
+            <div class="d-grid gap-2 mt-4">
+                <a href="{% url 'home' %}" class="btn btn-primary">На главную</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary">Войти снова</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
