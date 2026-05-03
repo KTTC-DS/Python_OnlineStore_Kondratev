@@ -104,3 +104,8 @@ Python_OnlineStore_Kondratev-LP/
 ├── docker-compose.yml     # оркестрация контейнеров\
 ├── README.md              # этот файл\
 └── .gitignore
+
+
+### Лицензия
+
+Разработано в рамках учебного курса. Свободное использование.
