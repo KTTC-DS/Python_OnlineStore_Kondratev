@@ -3,7 +3,7 @@ from django.core.management import call_command
 
 
 class Command(BaseCommand):
-    help = "Экспортирует остатки товаров (StockBalance) в файл stock_data.json"
+    help = "Экспортирует остатки товаров (StockBalance) в stock_data.json"
 
     def handle(self, *args, **options):
         try:
@@ -18,7 +18,8 @@ class Command(BaseCommand):
                     stdout=f                        # записываем в файл
                 )
             self.stdout.write(
-                self.style.SUCCESS('✅ Остатки успешно экспортированы в stock_data.json')
+                self.style.SUCCESS(
+                    '✅ Остатки успешно экспортированы в stock_data.json')
             )
         except Exception as e:
             self.stderr.write(

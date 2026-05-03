@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Мои заказы{% endblock %}
+{% block content %}
+<h1>Мои заказы</h1>
+
+{% if orders %}
+{% for order in orders %}
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <strong>Заказ №{{ order.id }}</strong> от {{ order.order_date|date:"d.m.Y H:i" }} |
+        Статус: <span class="badge
+                    {% if order.status == 'new' %}bg-secondary
+                    {% elif order.status == 'paid' %}bg-primary
+                    {% elif order.status == 'shipped' %}bg-info
+                    {% elif order.status == 'delivered' %}bg-success
+                    {% elif order.status == 'cancelled' %}bg-danger
+                    {% endif %}">
+                    {{ order.get_status_display }}
+                </span> |
+        Итого: <strong>{{ order.total_amount }} ₽</strong>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price_at_time }} ₽</td>
+                    <td>{{ item.price_at_time|floatformat:2 }} ₽</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Нет позиций</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-info">У вас пока нет заказов.</div>
+{% endif %}
+
+<a href="{% url 'product_list' %}" class="btn btn-secondary">Вернуться в каталог</a>
+{% endblock %}

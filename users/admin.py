@@ -1,15 +1,16 @@
-# users/admin.py
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Category, Product, StockBalance, Customer, CartItem, Order, OrderItem
+from .models import (User, Category, Product, StockBalance, Customer,
+                     CartItem, Order, OrderItem, Cart
+                     )
 
 
 # --- Пользователь (User) ---
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     # Отображение списка пользователей
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active')
+    list_display = ('username', 'email', 'first_name', 'last_name',
+                    'is_staff', 'is_active')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'first_name', 'last_name', 'email')
     fieldsets = UserAdmin.fieldsets + (
@@ -34,10 +35,14 @@ class ProductAdmin(admin.ModelAdmin):
 
     def display_image(self, obj):
         if obj.image:
-            return f"<img src='{obj.image.url}' width='50' height='50' style='object-fit: cover; border-radius: 4px;' />"
+            return (f"<img src='{obj.image.url}' "
+                    f"width='50' "
+                    f"height='50' "
+                    f"style='object-fit: cover; "
+                    f"border-radius: 4px;' />")
         return "Нет изображения"
     display_image.short_description = "Изображение"
-    display_image.allow_tags = True  # Для Django < 4.2; в 4.2+ не нужно
+    display_image.allow_tags = True
 
 
 # --- Остатки товаров ---
@@ -63,6 +68,13 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ('cart', 'product', 'quantity', 'added_at')
     list_filter = ('added_at',)
     search_fields = ('product__name',)
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'created_at')
+    list_display_links = ('id', 'user')
+    search_fields = ('user__username',)
 
 
 # --- Заказ ---

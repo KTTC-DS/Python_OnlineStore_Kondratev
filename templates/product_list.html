@@ -1,6 +1,30 @@
-<h1>Список продуктов</h1>
-<ul>
+{% extends 'base.html' %}
+{% block title %}Товары{% endblock %}
+{% block content %}
+<h1 class="mb-4">Каталог товаров</h1>
+<div class="row">
     {% for product in products %}
-    <li>{{ product.name }}</li>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 500px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 100px;">
+                Нет фото
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-truncate">{{ product.description|truncatechars:100 }}</p>
+                <p class="card-text"><strong>{{ product.price }} ₽</strong></p>
+                <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>Товаров пока нет.</p>
+    </div>
     {% endfor %}
-</ul>
+</div>
+{% endblock %}

@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}Вход в аккаунт{% endblock %}
 {% block content %}
+{% if request.GET.next %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    🔒 Для оформления заказа или добавления товаров в корзину необходимо авторизоваться.
+    Пожалуйста, войдите в свой аккаунт или <a href="{% url 'register' %}?next={{ request.GET.next }}" class="alert-link">зарегистрируйтесь</a>.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
         <div class="card shadow-sm">
@@ -8,65 +15,43 @@
                 <h2 class="card-title text-center mb-4">Войти</h2>
 
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    {% endfor %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
                 {% endif %}
 
                 {% if form.errors %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        Неверное имя пользователя или пароль. Попробуйте снова.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Неверное имя пользователя или пароль. Попробуйте снова.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 {% endif %}
 
                 <form method="post">
                     {% csrf_token %}
-
                     <div class="mb-3">
-                        {{ form.username.label_tag }}
-                        {{ form.username }}
-                        {% if form.username.help_text %}
-                            <small class="form-text text-muted">{{ form.username.help_text }}</small>
-                        {% endif %}
-                        {% if form.username.errors %}
-                            <div class="text-danger mt-1">
-                                {% for error in form.username.errors %}
-                                    <small>{{ error }}</small><br>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        <label for="id_username" class="form-label">Имя пользователя</label>
+                        <input type="text" name="username" id="id_username" class="form-control"
+                               value="{{ form.username.value|default:'' }}" autofocus required>
                     </div>
-
                     <div class="mb-3">
-                        {{ form.password.label_tag }}
-                        {{ form.password }}
-                        {% if form.password.errors %}
-                            <div class="text-danger mt-1">
-                                {% for error in form.password.errors %}
-                                    <small>{{ error }}</small><br>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+                        <label for="id_password" class="form-label">Пароль</label>
+                        <input type="password" name="password" id="id_password" class="form-control" required>
                     </div>
-
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" name="remember" id="remember">
                         <label class="form-check-label" for="remember">Запомнить меня</label>
                     </div>
-
                     <button type="submit" class="btn btn-primary w-100 py-2">Войти</button>
                 </form>
 
                 <hr class="my-4">
-
                 <p class="text-center mb-0">
                     Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
                 </p>
-
                 <p class="text-center mt-2">
                     <a href="#">Забыли пароль?</a>
                 </p>

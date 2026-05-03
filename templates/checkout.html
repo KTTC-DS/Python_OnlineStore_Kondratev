@@ -1,36 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Оформление заказа{% endblock %}
+{% block content %}
 <h1>Оформление заказа</h1>
 
-<h2>Ваша корзина</h2>
-<table border="1">
-  <thead>
-  <tr>
-    <th>Товар</th>
-    <th>Количество</th>
-    <th>Цена</th>
-    <th>Сумма</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for item in items %}
-  <tr>
-    <td>{{ item.product.name }}</td>
-    <td>{{ item.quantity }}</td>
-    <td>{{ item.product.price }} ₽</td>
-    <td>{{ item.product.price|floatformat:2 }} ₽</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-  <tfoot>
-  <tr>
-    <td colspan="3">Итого:</td>
-    <td>{{ cart.total|default:0 }} ₽</td>
-  </tr>
-  </tfoot>
-</table>
+<h3>Ваша корзина</h3>
+<div class="table-responsive mb-4">
+  <table class="table table-bordered">
+    <thead class="table-light">
+    <tr><th>Товар</th><th>Количество</th><th>Цена</th><th>Сумма</th></tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.product.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.product.price }} ₽</td>
+      <td>{{ item.product.price|floatformat:2 }} ₽</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot class="table-secondary">
+    <tr>
+      <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+      <td><strong>{{ total }} ₽</strong></td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
 
-<h2>Данные для доставки</h2>
+<h3>Данные для доставки</h3>
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Подтвердить заказ</button>
+  <div class="mb-3">
+    <label for="id_name" class="form-label">Имя</label>
+    <input type="text" name="name" id="id_name" class="form-control" value="{{ form.name.value|default:'' }}" required>
+  </div>
+  <div class="mb-3">
+    <label for="id_address" class="form-label">Адрес</label>
+    <textarea name="address" id="id_address" class="form-control" rows="3">{{ form.address.value|default:'' }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label for="id_email" class="form-label">Email</label>
+    <input type="email" name="email" id="id_email" class="form-control" value="{{ form.email.value|default:'' }}" required>
+  </div>
+  <button type="submit" class="btn btn-success">Подтвердить заказ</button>
+  <a href="{% url 'cart_detail' %}" class="btn btn-secondary">Вернуться в корзину</a>
 </form>
+{% endblock %}

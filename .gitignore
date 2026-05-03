@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Environment
+.env
+.venv
+venv/
+venv_docker/
+
+# IDE
+.idea/
+.vscode/
+
+# Docker
+*.pid
+
+# Secrets
+.env.local
+
+data.json
+stock_data.json
+
+# Coverage, тесты
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log/
+logs/

@@ -1,36 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Корзина{% endblock %}
+{% block content %}
 <h1>Корзина</h1>
 
 {% if items %}
-<table border="1">
-  <thead>
-  <tr>
-    <th>Товар</th>
-    <th>Количество</th>
-    <th>Цена за единицу</th>
-    <th>Сумма</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for item in items %}
-  <tr>
-    <td>{{ item.product.name }}</td>
-    <td>{{ item.quantity }}</td>
-    <td>{{ item.product.price }} ₽</td>
-    <td>{{ item.product.price|floatformat:2 }} ₽</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-  <tfoot>
-  <tr>
-    <td colspan="3">Итого:</td>
-    <td>{{ cart.total|default:0 }} ₽</td>
-  </tr>
-  </tfoot>
-</table>
-<form action="{% url 'checkout' %}" method="get">
-  <button type="submit">Оформить заказ</button>
-</form>
-<a href="{% url 'product_list' %}">Продолжить покупки</a>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+    <tr>
+      <th>Товар</th>
+      <th>Количество</th>
+      <th>Цена за единицу</th>
+      <th>Сумма</th>
+      <th>Действия</th>   <!-- новый столбец -->
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.product.name }}</td>
+      <td>
+      <div class="d-flex align-items-center">
+        <!-- Кнопка уменьшения -->
+        <form method="post" action="{% url 'cart_update_item' item.id %}" style="display: inline;">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="{{ item.quantity|add:-1 }}">
+          <button type="submit" class="btn btn-sm btn-outline-secondary" {% if item.quantity <= 1 %}disabled{% endif %}>−</button>
+        </form>
+
+        <span class="mx-2" style="min-width: 30px; text-align: center;">{{ item.quantity }}</span>
+
+        <!-- Кнопка увеличения -->
+        <form method="post" action="{% url 'cart_update_item' item.id %}" style="display: inline;">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="{{ item.quantity|add:1 }}">
+          <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+        </form>
+      </div>
+    </td>
+      <td>{{ item.product.price }} ₽</td>
+      <td>{{ item.product.price|floatformat:2 }} ₽</td>
+      <td>
+        <a href="{% url 'cart_remove_item' item.id %}"
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Удалить товар «{{ item.product.name }}» из корзины?');">
+          Удалить
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot class="table-secondary">
+    <tr>
+      <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+      <td colspan="2"><strong>{{ total }} ₽</strong></td>
+    <tr>
+    </tfoot>
+  </table>
+</div>
+
+<div class="d-flex justify-content-between mt-3">
+  <div>
+    <a href="{% url 'product_list' %}" class="btn btn-secondary">Продолжить покупки</a>
+    <a href="{% url 'cart_clear' %}" class="btn btn-warning" onclick="return confirm('Очистить всю корзину?');">Очистить корзину</a>
+  </div>
+  <a href="{% url 'checkout' %}" class="btn btn-primary">Оформить заказ</a>
+</div>
 {% else %}
-<p>Корзина пуста.</p>
+<div class="alert alert-info">Ваша корзина пуста.</div>
+<a href="{% url 'product_list' %}" class="btn btn-secondary">Вернуться в каталог</a>
 {% endif %}
+{% endblock %}

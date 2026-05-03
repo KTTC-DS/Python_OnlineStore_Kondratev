@@ -1,3 +1,10 @@
-<h1>Заказ оформлен</h1>
-<p>Спасибо, ваш заказ №{{ order.id }} принят. Ожидайте звонка оператора.</p>
-<a href="{% url 'product_list' %}">Вернуться на главную</a>
+{% extends 'base.html' %}
+{% block title %}Заказ оформлен{% endblock %}
+{% block content %}
+<div class="text-center">
+    <h1>Заказ оформлен</h1>
+    <p class="lead">Спасибо, ваш заказ №{{ order.id }} принят.</p>
+    <p>Ожидайте звонка для подтверждения заказа и уточнения деталей доставки.</p>
+    <a href="{% url 'product_list' %}" class="btn btn-primary">Вернуться в каталог</a>
+</div>
+{% endblock %}

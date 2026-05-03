@@ -16,7 +16,8 @@ class Command(BaseCommand):
                     stdout=f
                 )
             self.stdout.write(
-                self.style.SUCCESS('✅ Остатки успешно экспортированы в data.json')
+                self.style.SUCCESS(
+                    '✅ Остатки успешно экспортированы в data.json')
             )
         except Exception as e:
             self.stderr.write(

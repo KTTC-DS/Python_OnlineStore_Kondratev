@@ -11,10 +11,13 @@ class Command(BaseCommand):
             # Выполняем стандартную команду loaddata
             call_command('loaddata', 'data.json')
             self.stdout.write(
-                self.style.SUCCESS('✅ Успешно загружены остатки товаров из data.json')
+                self.style.SUCCESS(
+                    '✅ Успешно загружены остатки товаров из data.json')
             )
         except Exception as e:
             # Показываем полную ошибку и трейсбек
-            self.stderr.write(self.style.ERROR(f'❌ Ошибка при загрузке данных: {e}'))
+            self.stderr.write(self.style.ERROR(
+                f'❌ Ошибка при загрузке данных: {e}')
+            )
             self.stderr.write(self.style.ERROR('Полный traceback:'))
             self.stderr.write(self.style.ERROR(traceback.format_exc()))

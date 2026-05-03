@@ -1,6 +1,30 @@
-<h1>Добавить в корзину</h1>
-<form method="post" action="{% url 'add_to_cart' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="Добавить в корзину">.
-</form>
+{% extends 'base.html' %}
+{% block title %}Добавить в корзину{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">Добавление товара в корзину</div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_product" class="form-label">Товар</label>
+            <select name="product" id="id_product" class="form-select">
+              {% for product in form.product.field.queryset %}
+              <option value="{{ product.pk }}" {% if form.product.value == product.pk %}selected{% endif %}>{{ product.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="id_quantity" class="form-label">Количество</label>
+            <input type="number" name="quantity" id="id_quantity" class="form-control" value="{{ form.quantity.value|default:1 }}" min="1" max="99">
+          </div>
+          <button type="submit" class="btn btn-success">Добавить</button>
+          <a href="{% url 'product_list' %}" class="btn btn-secondary">Отмена</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
